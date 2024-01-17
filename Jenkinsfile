@@ -3,6 +3,7 @@ pipeline {
     stages {
          stage ('checkout') {   
            steps {
+             sh 'rm -rf hello-world-war'
              sh 'git clone https://github.com/varun-doode/hello-world-war.git'
                 }
          }
@@ -12,6 +13,11 @@ pipeline {
                 sh 'mvn clean install'
             }
         }
-         
+         stage ('deploy') {
+            steps{
+               sh 'ssh root@172.31.42.29'
+               sh 'scp /home/slave/workspace/Samplepipeline/target/hello-world-war-1.0.0.war root@172.31.42.29:/opt/apache-tomcat-8.5.98/webapps/'
+            }
+        }
     }
 }
